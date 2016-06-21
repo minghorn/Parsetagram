@@ -8,10 +8,12 @@
 
 import UIKit
 
-class CameraViewController: UIViewController {
+class CameraViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
 
         // Do any additional setup after loading the view.
     }
@@ -21,15 +23,31 @@ class CameraViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func makeImageThing(type: String) {
+        let vc = UIImagePickerController()
+        vc.delegate = self
+        vc.allowsEditing = true
+        if type == "Camera" {
+            vc.sourceType = UIImagePickerControllerSourceType.Camera
+        } else if type == "PhotoLibrary" {
+            vc.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+        }
+        self.presentViewController(vc, animated: true, completion: nil)
     }
-    */
+    
+
+    func imagePickerController(picker: UIImagePickerController,
+                               didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        // Get the image captured by the UIImagePickerController
+        let originalImage = info[UIImagePickerControllerOriginalImage] as! UIImage
+        let editedImage = info[UIImagePickerControllerEditedImage] as! UIImage
+        
+        // Do something with the images (based on your use case)
+        UIImageWriteToSavedPhotosAlbum(originalImage, nil, nil, nil)
+        UIImageWriteToSavedPhotosAlbum(editedImage, nil, nil, nil)
+        
+        // Dismiss UIImagePickerController to go back to your original view controller
+        dismissViewControllerAnimated(true, completion: nil)
+    }
 
 }

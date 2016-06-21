@@ -29,8 +29,13 @@ class LoginViewController: UIViewController {
         PFUser.logInWithUsernameInBackground(username.text!, password: password.text!) {
             (user: PFUser?, error: NSError?) -> Void in
             if(user != nil) {
-                self.performSegueWithIdentifier("loginSegue", sender: nil)
-                print("logged in")
+                if(user?.objectForKey("gender") != nil) {
+                    self.performSegueWithIdentifier("loginSegue", sender: nil)
+                    print("logged in")
+                } else {
+                    self.performSegueWithIdentifier("completeSignUp", sender: nil)
+                }
+                
             }
         }
     }
@@ -51,14 +56,9 @@ class LoginViewController: UIViewController {
             }
         }
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        
     }
-    */
 
 }
