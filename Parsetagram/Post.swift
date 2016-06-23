@@ -21,19 +21,24 @@ class Post: NSObject {
          - parameter caption: Caption text input by the user
          - parameter completion: Block to be executed after save operation is complete
          */
-        class func postUserImage(image: UIImage?, withCaption caption: String?, withCompletion completion: PFBooleanResultBlock?) {
+        class func postUserImage(image: UIImage?, withCaption caption: String?){
             // Create Parse object PFObject
             let post = PFObject(className: "Post")
             
             // Add relevant fields to the object
             post["media"] = getPFFileFromImage(image) // PFFile column type
-            post["author"] = PFUser.currentUser() // Pointer column type that points to PFUser
+            post["author"] = parseUser.currentUser() // Pointer column type that points to parseUser
             post["caption"] = caption
             post["likesCount"] = 0
             post["commentsCount"] = 0
             
             // Save object (following function will save the object in Parse asynchronously)
-            post.saveInBackgroundWithBlock(completion)
+            post.saveInBackgroundWithBlock{ (success: Bool, error: NSError?) in
+                if let error = error {
+                    print(error.localizedDescription)
+                }
+            }
+            
         }
         
         /**

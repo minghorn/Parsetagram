@@ -7,13 +7,30 @@
 //
 
 import UIKit
+import Parse
+import ParseUI
 
-class ProfileViewController: UIViewController {
+class ProfileViewController: UIViewController, UICollectionViewDataSource {
 
+    @IBOutlet weak var profileImage: UIImageView!
+    @IBOutlet weak var usernameLabel: UILabel!
+    @IBOutlet weak var descLabel: UILabel!
+    @IBOutlet weak var likedButton: UIButton!
+    @IBOutlet weak var postsButton: UIButton!
+    @IBOutlet weak var likesButton: UIButton!
+    
+    @IBOutlet weak var collectionView: UICollectionView!
+    var posts: [PFObject]?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        collectionView.dataSource = self
+        let user = parseUser.currentUser()
+        usernameLabel.text = user?.username
+        
+        getPosts()
         // Do any additional setup after loading the view.
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -21,15 +38,41 @@ class ProfileViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if(posts != nil) {
+            return (posts?.count)!
+        }
+        return 0
     }
-    */
+    
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("photoGridCell", forIndexPath: indexPath) as! PhotoCollectionCell
+        let post = posts![indexPath.row]
+        cell.postImage.file = post["media"] as? PFFile
+        return cell
+    }
+    
+    func getPosts() {
+        let user = parseUser.currentUser()
+        
+        //Query all the PFObjects and put them into the post array
+        let query = PFQuery(className: "Post")
+        query.includeKey("author")
+        query.whereKey("author", equalTo: user!)
+        query.orderByDescending("createdAt")
+        
+        // fetch data asynchronously
+        query.findObjectsInBackgroundWithBlock { (newPosts: [PFObject]?, error: NSError?) -> Void in
+            if let newPosts = newPosts {
+                // do something with the data fetched
+                self.posts = newPosts
+                self.collectionView.reloadData()
+            } else {
+                // handle error
+                print(error?.localizedDescription)
+            }
+        }
+    }
+
 
 }

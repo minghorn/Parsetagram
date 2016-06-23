@@ -29,24 +29,20 @@ class LoginViewController: UIViewController {
         PFUser.logInWithUsernameInBackground(username.text!, password: password.text!) {
             (user: PFUser?, error: NSError?) -> Void in
             if(user != nil) {
-                if(user?.objectForKey("gender") != nil) {
-                    self.performSegueWithIdentifier("loginSegue", sender: nil)
-                    print("logged in")
-                } else {
-                    self.performSegueWithIdentifier("completeSignUp", sender: nil)
-                }
-                
+                self.performSegueWithIdentifier("loginSegue", sender: nil)
+                print("logged in")
             }
         }
     }
     
     @IBAction func onSignUp(sender: AnyObject) {
-        let newUser = PFUser()
+        let newUser = parseUser()
         newUser.username = username.text
         newUser.password = password.text
+
         newUser.signUpInBackgroundWithBlock { (success: Bool, error: NSError?) in
             if success {
-                self.performSegueWithIdentifier("loginSegue", sender: nil)
+                self.performSegueWithIdentifier("completeSignUp", sender: nil)
                 print("yay created a new user!")
             } else {
                 print(error?.localizedDescription)
@@ -55,10 +51,6 @@ class LoginViewController: UIViewController {
                 }
             }
         }
-    }
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
     }
 
 }

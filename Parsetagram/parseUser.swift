@@ -9,6 +9,13 @@
 import UIKit
 import Parse
 
-class parseUser: NSObject {
-
+class parseUser: PFUser{
+    dynamic var gender: Int = 2
+    dynamic var profileImage: NSURL?
+    dynamic var desc: String?
+    
+    override class func initialize() {
+        self.registerSubclass()
+    }
 }
+

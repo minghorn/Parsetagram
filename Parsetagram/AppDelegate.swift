@@ -13,7 +13,7 @@ import Parse
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    var storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
@@ -29,9 +29,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         )
         
         if PFUser.currentUser() != nil {
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let tabBarController = storyboard.instantiateViewControllerWithIdentifier("tabBar")
-            window?.rootViewController!.presentViewController(tabBarController, animated: true, completion: nil)
+            self.window?.rootViewController = storyboard.instantiateViewControllerWithIdentifier("tabBar")
+            
             print("Login saved")
         }
         return true

@@ -10,11 +10,13 @@ import UIKit
 
 class CameraViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
+    @IBOutlet weak var editedPhotoView: UIImageView!
+    @IBOutlet weak var optionalEdits: UISegmentedControl!
+    @IBOutlet weak var caption: UITextField!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-
+        makeImageThing(1)
         // Do any additional setup after loading the view.
     }
 
@@ -22,14 +24,15 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+
     
-    func makeImageThing(type: String) {
+    func makeImageThing(type: Int) {
         let vc = UIImagePickerController()
         vc.delegate = self
         vc.allowsEditing = true
-        if type == "Camera" {
+        if type == 0 {
             vc.sourceType = UIImagePickerControllerSourceType.Camera
-        } else if type == "PhotoLibrary" {
+        } else if type == 1 {
             vc.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
         }
         self.presentViewController(vc, animated: true, completion: nil)
@@ -45,9 +48,22 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
         // Do something with the images (based on your use case)
         UIImageWriteToSavedPhotosAlbum(originalImage, nil, nil, nil)
         UIImageWriteToSavedPhotosAlbum(editedImage, nil, nil, nil)
+        editedPhotoView.image = editedImage
         
         // Dismiss UIImagePickerController to go back to your original view controller
         dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    @IBAction func cameraClicked(sender: AnyObject) {
+        makeImageThing(0)
+    }
+    @IBAction func libraryClicked(sender: AnyObject) {
+        makeImageThing(1)
+    }
+
+    @IBAction func shareClicked(sender: AnyObject) {
+        Post.postUserImage(editedPhotoView.image, withCaption: caption?.text)
+        tabBarController?.selectedIndex = 0
     }
 
 }
