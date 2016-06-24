@@ -32,6 +32,10 @@ class ProfileViewController: UIViewController, UICollectionViewDataSource {
         // Do any additional setup after loading the view.
         
     }
+    
+    override func viewDidAppear(animated: Bool) {
+        getPosts()
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -71,6 +75,26 @@ class ProfileViewController: UIViewController, UICollectionViewDataSource {
                 // handle error
                 print(error?.localizedDescription)
             }
+        }
+    }
+    
+    @IBAction func logOut(sender: AnyObject) {
+        PFUser.logOutInBackgroundWithBlock { (error: NSError?) in
+            if error != nil {
+                print("Could not log out")
+            } else {
+                self.performSegueWithIdentifier("logoutSegue", sender: self)
+            }
+        }
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "detailSegue" {
+            let indexPath1 = self.collectionView.indexPathForCell(sender as! UICollectionViewCell)
+            let vc = segue.destinationViewController as? UINavigationController
+            let detailVC = vc?.viewControllers.first as? DetailsViewController
+            let post = posts![indexPath1!.item]
+            detailVC!.post = post
         }
     }
 

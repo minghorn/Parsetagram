@@ -17,9 +17,10 @@ class EditViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        usernameField.text = PFUser.currentUser()?.username
-        let desc = parseUser.currentUser()?.desc
-        let gen = parseUser.currentUser()?.gender
+        let user = parseUser.currentUser()
+        usernameField.text = user?.username
+        let desc = user?.desc
+        let gen = user?.gender
         if(desc != nil) {
             descriptionField.text = desc
         }
@@ -33,6 +34,10 @@ class EditViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
 
+    @IBAction func didTap(sender: AnyObject) {
+        view.endEditing(true)
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -45,6 +50,7 @@ class EditViewController: UIViewController {
     }
 
     @IBAction func cancelChanges(sender: AnyObject) {
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
 
 

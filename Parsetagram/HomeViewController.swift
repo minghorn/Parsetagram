@@ -15,8 +15,6 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var tableView: UITableView!
     var posts: [PFObject]?
     
-    var timer: NSTimer?
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
@@ -25,17 +23,15 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refreshControlAction(_:)), forControlEvents: UIControlEvents.ValueChanged)
         tableView.insertSubview(refreshControl, atIndex: 0)
+         getPosts()
         
         
     }
     
     override func viewWillAppear(animated: Bool) {
-        timer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: #selector(getPosts), userInfo: nil, repeats: true)
+        getPosts()
     }
-    
-    override func viewWillDisappear(animated: Bool) {
-        timer!.invalidate()
-    }
+
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -56,10 +52,16 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.photoImage.loadInBackground()
         cell.usernameLabel.text = post["author"].username
         
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateStyle = .MediumStyle
+        dateFormatter.timeStyle = .NoStyle
+        
+        cell.dateLabel.text = dateFormatter.stringFromDate(post.createdAt!)
+        
         if(post["caption"] != nil) {
             cell.caption.text = post["caption"] as? String
         } else {
-            cell.caption.text = ""
+            cell.caption.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
         }
         return cell
     }
@@ -76,28 +78,20 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             if let newPosts = newPosts {
                 // do something with the data fetched
                 self.posts = newPosts
+                self.tableView.reloadData()
             } else {
                 // handle error
                 print(error?.localizedDescription)
             }
         }
-        self.tableView.reloadData()
 
     }
+    
     func refreshControlAction(refreshControl: UIRefreshControl) {
         getPosts()
         refreshControl.endRefreshing()
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "detailSegue" {
-            let indexPath1 = self.tableView.indexPathForCell(sender as! UITableViewCell)
-            let vc = segue.destinationViewController as? UINavigationController
-            let detailVC = vc?.viewControllers.first as? DetailsViewController
-            let post = posts![indexPath1!.item]
-            detailVC!.post = post
-        }
-    }
 
     
 

@@ -17,6 +17,8 @@ class DetailsViewController: UIViewController {
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var postImage: PFImageView!
     @IBOutlet weak var captionLabel: UILabel!
+    @IBOutlet weak var likeHeart: UIImageView!
+
     
     var post: PFObject?
     
@@ -24,17 +26,51 @@ class DetailsViewController: UIViewController {
         super.viewDidLoad()
         
         userLabel.text = post?["author"].username
-        dateLabel.text = post?["createdAt"] as? String
+        //dateLabel.text = post?["createdAt"]
         postImage.file = post?["media"] as? PFFile
-        
-        
-
         // Do any additional setup after loading the view.
+        
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateStyle = .MediumStyle
+        dateFormatter.timeStyle = .NoStyle
+        
+        dateLabel.text = dateFormatter.stringFromDate(post!.createdAt!)
+        
+        if(post!["caption"] != nil) {
+            captionLabel.text = post!["caption"] as? String
+        } else {
+            captionLabel.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+        }
+        
+        let gesture = UITapGestureRecognizer(target: self, action:#selector(PhotoPostCell.onDoubleTap(_:)))
+        gesture.numberOfTapsRequired = 2
+        view.addGestureRecognizer(gesture)
+        
+        likeHeart?.hidden = true
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    @IBAction func backPressed(sender: AnyObject) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func onDoubleTap(sender:AnyObject) {
+        likeHeart?.hidden = false
+        likeHeart?.alpha = 1.0
+        
+        UIView.animateWithDuration(1.0, delay: 1.0, options: [], animations: {
+            
+            self.likeHeart?.alpha = 0
+            
+            }, completion: {
+                (value:Bool) in
+                
+                self.likeHeart?.hidden = true
+        })
     }
     
 
