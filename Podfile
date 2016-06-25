@@ -8,5 +8,8 @@ target 'Parsetagram' do
   # Pods for Parsetagram
     pod 'Parse'
 	pod 'ParseUI'
+	pod 'SVPullToRefresh'
+	pod 'MBProgressHUD'
+	pod 'AFNetworking'
 
 end

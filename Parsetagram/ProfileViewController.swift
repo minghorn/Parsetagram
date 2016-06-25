@@ -21,13 +21,13 @@ class ProfileViewController: UIViewController, UICollectionViewDataSource {
     
     @IBOutlet weak var collectionView: UICollectionView!
     var posts: [PFObject]?
+    let user = parseUser.currentUser()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.dataSource = self
-        let user = parseUser.currentUser()
-        usernameLabel.text = user?.username
         
+        usernameLabel.text = user?.username
         getPosts()
         // Do any additional setup after loading the view.
         
@@ -35,6 +35,7 @@ class ProfileViewController: UIViewController, UICollectionViewDataSource {
     
     override func viewDidAppear(animated: Bool) {
         getPosts()
+        descLabel.text = user?.desc
     }
 
     override func didReceiveMemoryWarning() {
@@ -87,6 +88,9 @@ class ProfileViewController: UIViewController, UICollectionViewDataSource {
             }
         }
     }
+
+    
+
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "detailSegue" {

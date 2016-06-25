@@ -14,12 +14,13 @@ class PhotoPostCell: UITableViewCell {
 
     @IBOutlet weak var caption: UILabel!
     @IBOutlet weak var usernameLabel: UILabel!
-    @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var photoImage: PFImageView!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var likeHeart: UIImageView!
+    @IBOutlet weak var likesLabel: UILabel!
+    @IBOutlet weak var profileImage: PFImageView!
 
-    
+    var parseObject: PFObject?
     
     override func awakeFromNib() {
         let gesture = UITapGestureRecognizer(target: self, action:#selector(PhotoPostCell.onDoubleTap(_:)))
@@ -39,6 +40,17 @@ class PhotoPostCell: UITableViewCell {
     }
 
     func onDoubleTap(sender:AnyObject) {
+        if(parseObject != nil) {
+            if var likes:Int? = parseObject!.objectForKey("likesCount") as? Int {
+                likes! += 1
+                
+                parseObject!.setObject(likes!, forKey: "likesCount");
+                parseObject!.saveInBackground();
+                
+                likesLabel?.text = "\(likes!) likes";
+            }
+        }
+        
         likeHeart?.hidden = false
         likeHeart?.alpha = 1.0
         

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class CameraViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
@@ -74,6 +75,9 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
     }
 
     @IBAction func shareClicked(sender: AnyObject) {
+        let barViewControllers = self.tabBarController?.viewControllers
+        let svc = barViewControllers![0] as! HomeViewController
+        svc.shareDidHappen = true
         Post.postUserImage(editedPhotoView.image, withCaption: caption?.text)
         tabBarController?.selectedIndex = 0
     }
@@ -91,11 +95,7 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
     }
     
     func keyboardWillShow(notification: NSNotification!) {
-//        let userInfo:NSDictionary = notification.userInfo!
-//        let keyboardFrame:NSValue = userInfo.valueForKey(UIKeyboardFrameEndUserInfoKey) as! NSValue
-//        let keyboardRectangle = keyboardFrame.CGRectValue()
-//        let keyboardHeight = keyboardRectangle.height
-        childView.frame.origin.y = initialY - 50
+        childView.frame.origin.y = initialY - 80
     }
     
     func keyboardWillHide(notification: NSNotification!) {
@@ -106,4 +106,11 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
         view.endEditing(true)
     }
 
+//    @IBAction func setProfileImage(sender: AnyObject) {
+//        let user = parseUser.currentUser()
+//        let image = parseUser.getPFFileFromImage(editedImage!)
+//        user?.setObject(image!, forKey: "profileImage")
+//        user?.saveInBackground()
+//        tabBarController?.selectedIndex = 0
+//    }
 }

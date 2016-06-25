@@ -12,12 +12,13 @@ import ParseUI
 
 class DetailsViewController: UIViewController {
 
-    @IBOutlet weak var profImage: UIImageView!
+    @IBOutlet weak var profImage: PFImageView!
     @IBOutlet weak var userLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var postImage: PFImageView!
     @IBOutlet weak var captionLabel: UILabel!
     @IBOutlet weak var likeHeart: UIImageView!
+    @IBOutlet weak var likesLabel: UILabel!
 
     
     var post: PFObject?
@@ -47,6 +48,7 @@ class DetailsViewController: UIViewController {
         view.addGestureRecognizer(gesture)
         
         likeHeart?.hidden = true
+        likesLabel.text = "\(String(post!["likesCount"])) likes"
     }
 
     override func didReceiveMemoryWarning() {
@@ -59,6 +61,17 @@ class DetailsViewController: UIViewController {
     }
     
     func onDoubleTap(sender:AnyObject) {
+        if(post != nil) {
+            if var likes:Int? = post!.objectForKey("likesCount") as? Int {
+                likes! += 1
+                
+                post!.setObject(likes!, forKey: "likesCount");
+                post!.saveInBackground();
+                
+                likesLabel?.text = "\(likes!) likes";
+            }
+        }
+        
         likeHeart?.hidden = false
         likeHeart?.alpha = 1.0
         

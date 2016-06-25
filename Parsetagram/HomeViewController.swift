@@ -9,11 +9,15 @@
 import UIKit
 import Parse
 import ParseUI
+import SVPullToRefresh
+import MBProgressHUD
 
-class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     var posts: [PFObject]?
+    var skip = 20
+    var shareDidHappen = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,11 +29,25 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.insertSubview(refreshControl, atIndex: 0)
          getPosts()
         
+        tableView.addInfiniteScrollingWithActionHandler({() -> Void in
+            self.getPosts()
+            self.tableView.infiniteScrollingView.stopAnimating()
+        })
+        
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 565
+        
         
     }
     
     override func viewWillAppear(animated: Bool) {
-        getPosts()
+        if(!shareDidHappen) {
+            getPosts()
+        } else {
+            MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+            getPosts()
+            shareDidHappen = false
+        }
     }
 
 
@@ -51,6 +69,8 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.photoImage.file = post["media"] as? PFFile
         cell.photoImage.loadInBackground()
         cell.usernameLabel.text = post["author"].username
+        cell.likesLabel.text = "\(String(post["likesCount"])) likes"
+        cell.parseObject = post
         
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateStyle = .MediumStyle
@@ -63,6 +83,13 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         } else {
             cell.caption.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
         }
+        if(post["author"].valueForKey("profileImage") != nil) {
+            let profile = post["author"].valueForKey("profileImage") as? PFFile
+            cell.profileImage.file = profile! as PFFile
+            print("there is a file")
+        } else {
+            print("no profile image")
+        }
         return cell
     }
     
@@ -71,14 +98,20 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         let query = PFQuery(className: "Post")
         query.orderByDescending("createdAt")
         query.includeKey("author")
-        query.limit = 20
+        query.limit = skip
         
         // fetch data asynchronously
         query.findObjectsInBackgroundWithBlock { (newPosts: [PFObject]?, error: NSError?) -> Void in
             if let newPosts = newPosts {
                 // do something with the data fetched
-                self.posts = newPosts
+                if(self.posts == nil) {
+                    self.posts = newPosts
+                } else {
+                    self.posts?.appendContentsOf(newPosts)
+                }
+                self.skip += 20
                 self.tableView.reloadData()
+                MBProgressHUD.hideHUDForView(self.view, animated: true)
             } else {
                 // handle error
                 print(error?.localizedDescription)
@@ -91,8 +124,4 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         getPosts()
         refreshControl.endRefreshing()
     }
-    
-
-    
-
 }

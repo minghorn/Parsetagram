@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7A08DA721D1DDF89003E1D4E /* InfiniteScrollActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A08DA711D1DDF89003E1D4E /* InfiniteScrollActivityView.swift */; };
+		7A08DA741D1E19DB003E1D4E /* ProfileImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A08DA731D1E19DB003E1D4E /* ProfileImage.swift */; };
 		7AAED2B71D188C2200892FF5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AAED2B61D188C2200892FF5 /* AppDelegate.swift */; };
 		7AAED2BC1D188C2200892FF5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7AAED2BA1D188C2200892FF5 /* Main.storyboard */; };
 		7AAED2BE1D188C2200892FF5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7AAED2BD1D188C2200892FF5 /* Assets.xcassets */; };
@@ -27,6 +29,8 @@
 /* Begin PBXFileReference section */
 		3AAC71A62D9D709898128B4A /* Pods_Parsetagram.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Parsetagram.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		475BA9A0DA634691432A1B50 /* Pods-Parsetagram.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parsetagram.release.xcconfig"; path = "Pods/Target Support Files/Pods-Parsetagram/Pods-Parsetagram.release.xcconfig"; sourceTree = "<group>"; };
+		7A08DA711D1DDF89003E1D4E /* InfiniteScrollActivityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfiniteScrollActivityView.swift; sourceTree = "<group>"; };
+		7A08DA731D1E19DB003E1D4E /* ProfileImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileImage.swift; sourceTree = "<group>"; };
 		7AAED2B31D188C2200892FF5 /* Parsetagram.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Parsetagram.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AAED2B61D188C2200892FF5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7AAED2BB1D188C2200892FF5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -110,6 +114,8 @@
 			children = (
 				7AAED2D61D18FF0C00892FF5 /* Post.swift */,
 				7AAED2D81D18FF3D00892FF5 /* parseUser.swift */,
+				7A08DA731D1E19DB003E1D4E /* ProfileImage.swift */,
+				7A08DA711D1DDF89003E1D4E /* InfiniteScrollActivityView.swift */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -257,12 +263,14 @@
 				7AAED2D11D18FD2B00892FF5 /* ProfileViewController.swift in Sources */,
 				7AAED2C91D18939B00892FF5 /* LoginViewController.swift in Sources */,
 				7AAED2CF1D18D2D300892FF5 /* CameraViewController.swift in Sources */,
+				7A08DA741D1E19DB003E1D4E /* ProfileImage.swift in Sources */,
 				7AF7DE021D1B59B800245289 /* DetailsViewController.swift in Sources */,
 				7AAED2B71D188C2200892FF5 /* AppDelegate.swift in Sources */,
 				7AF7DE001D1B3E5200245289 /* PhotoCollectionCell.swift in Sources */,
 				7AAED3031D19FDD500892FF5 /* PhotoPostCell.swift in Sources */,
 				7AAED2D91D18FF3D00892FF5 /* parseUser.swift in Sources */,
 				7AAED2CD1D18AB6800892FF5 /* HomeViewController.swift in Sources */,
+				7A08DA721D1DDF89003E1D4E /* InfiniteScrollActivityView.swift in Sources */,
 				7AAED2D71D18FF0C00892FF5 /* Post.swift in Sources */,
 				7AAED2D31D18FD4B00892FF5 /* EditViewController.swift in Sources */,
 			);

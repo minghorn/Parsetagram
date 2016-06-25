@@ -8,30 +8,20 @@
 
 import UIKit
 import Parse
+import ParseUI
+import AFNetworking
 
 class EditViewController: UIViewController {
 
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var descriptionField: UITextField!
     @IBOutlet weak var genderRadio: UISegmentedControl!
+    @IBOutlet weak var profileImage: UIImageView!
+    let user = parseUser.currentUser()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let user = parseUser.currentUser()
         usernameField.text = user?.username
-        let desc = user?.desc
-        let gen = user?.gender
-        if(desc != nil) {
-            descriptionField.text = desc
-        }
-        if(gen != 2) {
-            if(gen == 0) {
-                genderRadio.selectedSegmentIndex = 0
-            } else {
-                genderRadio.selectedSegmentIndex = 1
-            }
-        }
-        // Do any additional setup after loading the view.
     }
 
     @IBAction func didTap(sender: AnyObject) {
@@ -44,9 +34,10 @@ class EditViewController: UIViewController {
     }
     
     @IBAction func saveChanges(sender: AnyObject) {
-        parseUser.currentUser()?.username = usernameField.text
-        parseUser.currentUser()?.desc = descriptionField.text
-        parseUser.currentUser()?.gender = genderRadio.selectedSegmentIndex
+        user!.setObject(descriptionField.text!, forKey: "desc")
+        user!.setObject(usernameField.text!, forKey: "username")
+        user!.saveInBackground();
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
 
     @IBAction func cancelChanges(sender: AnyObject) {

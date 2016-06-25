@@ -8,14 +8,33 @@
 
 import UIKit
 import Parse
+import ParseUI
 
 class parseUser: PFUser{
-    dynamic var gender: Int = 2
-    dynamic var profileImage: NSURL?
-    dynamic var desc: String?
     
     override class func initialize() {
         self.registerSubclass()
+    }
+    
+    @NSManaged var desc: String?
+    @NSManaged var profileImage: PFFile?
+    
+    /**
+     Method to convert UIImage to PFFile
+     
+     - parameter image: Image that the user wants to upload to parse
+     
+     - returns: PFFile for the the data in the image
+     */
+    class func getPFFileFromImage(image: UIImage?) -> PFFile? {
+        // check if image is not nil
+        if let image = image {
+            // get image data and check if that is not nil
+            if let imageData = UIImagePNGRepresentation(image) {
+                return PFFile(name: "image.png", data: imageData)
+            }
+        }
+        return nil
     }
 }
 
